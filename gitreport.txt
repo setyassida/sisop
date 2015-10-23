@@ -1,0 +1,27 @@
+
+/install git
+sudo -E apt-get install git
+
+/cek versi git
+git --version
+
+/menambahkan file untuk di commit
+git add [filename]
+
+/menghapus file untuk di commit
+git rm [filename]
+
+/commit perubahan
+git commit -m "your comment"
+
+/commit semua perubahan
+git commit -a 
+
+/melakukan update ke server
+git push
+
+/mendapatkan update terbaru dari server
+git pull
+
+/cek status file di local git
+git status
