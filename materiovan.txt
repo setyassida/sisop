@@ -1,0 +1,16 @@
+Git adalah perangkat lunak pengontrol versi atau proyek manajemen kode perangkat lunak yang diciptakan oleh Linus Torvalds, yang pada awalnya ditujukan untuk pengembangan kernel Linux. Desain Git terinspirasi oleh BitKeeper dan Monotone [2][3]. Git pada awalnya hanya dirancang sebagai mesin tingkat rendah yang dapat digunakan oleh tampilan muka (front end) lain seperti Cogito atau StGIT [4]. Namun selanjutnya proyek inti Git telah berkembang menjadi pengontrol revisi lengkap yang dapat digunakan langsung [5]. Saat ini, beberapa perangkat lunak terkenal menggunakan Git sebagai pengontrol revisinya [6], antara lain kernel Linux, Server X.org, pengembangan inti OLPC (One Laptop per Child) [7], serta kerangka kerja web Ruby on Rails [8].
+
+Pemeliharaan perangkat lunak Git saat ini diawasi oleh Junio Hamano. Dirilis di bawah Lisensi Publik Umum GNU versi 2, Git adalah suatu perangkat lunak bebas.
+
+------------------------------------------------------------------------------------------------------------------------------------------------	
+
+GitHub adalah layanan penginangan web bersama untuk proyek pengembangan perangkat lunak yang menggunakan sistem pengontrol versi Git. GitHub menawarkan paket gratis dan komersial untuk proyek sumber terbuka dan diluncurkan sejak tahun 2008.[1] Menurut survei terhadap pengguna Git pada tahun 2009, GitHub adalah situs penginangan Git terpopuler.[3]
+Deskripsi
+
+Situs ini menyediakan fungsionalitas jejaring sosial seperti umpan web, pengikut, wiki (menggunakan perangkat lunak Wiki gollum) dan grafik jejaring sosial untuk menampilkan bagaimana para pengembang menggarap versi repositori mereka.
+
+Github juga mengoperasikan layanan-layanan lain: situs bergaya pastebin bernama Gist yang menyajikan wiki untuk masing-masing repositori dan laman web yang bisa disunting melalui sebuah repositori Git, layanan penginangan slide bernama Speaker Deck, serta platform analisis web bernama Gauges.
+
+Per Januari 2010, Github dioperasikan dengan nama Github, Inc.
+
+Perangkat lunak yang menjalankan Github ditulis dengan Ruby on Rails dan Erlang oleh para pengembang Github, Inc. (sebelumnya dikenal sebagai Logical Awesome), yakni Chris Wanstrath, PJ Hyett, dan Tom Preston-Werner.
