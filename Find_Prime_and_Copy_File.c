@@ -1,25 +1,22 @@
 #include<stdio.h>
+#include <stdlib.h>
 #include <pthread.h>
-#include <unistd.h>
 void *find_prime(void *args) {
-	int input,i,j,k;
-	printf("Input some number : ");scanf("%d",&input);
-	printf("The Prime's number less equal than %d : ",input);
-	for(i=0; i<=input;i++){
-		if(i==2){
-			printf("%d ",i);
+  int maks= (int)args;
+  int count;
+	if(maks==2){
+	 	return (void *)maks;
+	}
+	for(count=2;count<maks;count++){
+		if(maks%count==0){
+		   	break;
+		}else if(count==(maks-1)){
+			return (void*)maks;
+		}else{
+			continue;
 		}
-		for(j=2;j<i;j++){
-			if(i%j==0){
-	   			 break;
-			}else if(j==(i-1)){
-				printf("%d ",i);
-			}else{
-				continue;
-			}
-		}
-    	}
-	printf("\n");
+	}
+  	pthread_exit(NULL); // Kalau tidak ada ini, jika maks-nya 2 maka return nya 2 kali
 }
 void *copy1(void *args) {
 	 //char *arg[] = {"/bin/ls", "-r", "-t", "-l", (char *) 0 };
@@ -30,13 +27,20 @@ void *copy1(void *args) {
 
 //}
 void main () {
-	int input;
-//	while(1){
-//		printf("1. ")
-//	}
-	pthread_t t1;
-//	pthread_create(&t1, NULL, find_prime, NULL);
-	pthread_create(&t1, NULL, find_prime, NULL);
-//	pthread_create(&t1, NULL, copy1, NULL);
-	pthread_join(t1, NULL); // For calling find prime thread
+	int input,i=1,banyak_bilprim =0;
+	printf("Input some number : ");scanf("%d",&input);	
+	pthread_t t1[input];
+	void* bilprim;
+	while(i <= input)
+    	{
+        	pthread_create(&(t1[i]), NULL, find_prime, (void*)i);
+		pthread_join(t1[i], &bilprim);
+		if(bilprim!=0){
+			printf("%d ",(int)bilprim);       
+			banyak_bilprim++;
+		}		
+
+		i++;
+	}
+	printf("\nTerdapat %d bilangan prima \n",banyak_bilprim);
 }
