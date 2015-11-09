@@ -1,0 +1,19 @@
+1. Membuat sebuah shell
+	#Bisa berpindah direktori aktif
+	#Bisa menjalankan perintah-perintah yang ada di /bin dan usr/bin/
+	#Tidak berhenti ketika ditekan Ctrl+C & Ctrl+Z
+	#Otomatis logout/keluar ketika menekan Ctrl+D
+	#Bisa menjalankan bebrapa perintah secara background jika perintah diakhiri dengan ampersand(&)
+	#Dilarang menggunakan fungsi system
+
+--------------------------------------------------------------------------------------------------------------------
+2. Mencari jumlah bilangan prima kurang dari N
+	#input N
+	#Task : Mencari jumlah bilangan prima < N
+
+--------------------------------------------------------------------------------------------------------------------
+3. Membuat aplikasi multithread untuk menyalin isi file
+	#Ada 2 buah thread
+	#Thread 1 --> Membaca isi file dan menuliskannya ke file salinan ke 1
+	#Thread 2 --> Membaca isi file salinan ke 1 dan menuliskannya ke file salinan ke 2
+
