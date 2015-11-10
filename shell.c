@@ -13,83 +13,77 @@
 #define KCYN "\x1B[36m"
 #define KWHT "\x1B[37m"
 #define RESET "\033[0m"
-/*int lsh_launch(char **args)
+
+void signal_handler(int signo) // Fungsi penangkap sinyal
 {
-  pid_t pid, wpid;
-  int status;
-
-  pid = fork();
-  if (pid == 0) {
-    // Child process
-    if (execvp(args[0], args) == -1) {
-      perror("lsh");
+  if (signo == SIGTSTP){
+        signal(SIGTSTP, signal_handler);
     }
-    exit(EXIT_FAILURE);
-  } else if (pid < 0) {
-    // Error forking
-    perror("lsh");
-  } else {
-    // Parent process
-    do {
-      wpid = waitpid(pid, &status, WUNTRACED);
-    } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-  }
-
-  return 1;
+ else if (signo == SIGINT){
+        signal(SIGINT, signal_handler);
+    }
 }
 
-*/
-char* inputs(){
+char* inputs(){ // Fungsi untuk menerima inputan user
     int Max=MaxInput;
 	char* input=malloc(sizeof(char)*Max);
-	//int index=0;
 
-//char *line = NULL;
-//  ssize_t bufsize = 0; // have getline allocate a buffer for us
-  getline(&input, &Max, stdin);
-
-//	char *token = strtok (input, " |");
-//while(token != NULL){
-//	printf("Hasil strtok() : %s\n",token);
-//	token = strtok (NULL, "|");
-//}
-//printf("%s\n",input);
-return input;
+    getline(&input, &Max, stdin);
+    return input;
 }
-char **splitToToken(char* input){
+char **splitToToken(char* input){ // Fungsi untuk memecah inputan user
     int Max=MaxInput;
     int index=0;
-    char *token;
-    char **tokens=malloc(sizeof(char)*Max);
+    char *token; // Inputan utuh
+    char **tokens=malloc(sizeof(char)*Max); // tokens untuk menampung pecahan2 token
     token = strtok (input,"\n \t\r\a");
     while(token!=NULL){
         tokens[index]=token;
         index++;
-   //     token++;
-  //      puts(tokens[index]);
-  token=strtok(NULL,"\n \t\r\a");
+        token=strtok(NULL,"\n \t\r\a");
     }
     return tokens;
-
+}
+void execute(char**args){ //Fungsi membuat proses dr inputan user
+    pid_t process,wpid;
+    int status;
+    process=fork();
+    if(process==0){
+        execvp(args[0], args); // Eksekusi Inputan user
+    }else{
+        do {
+            wpid = waitpid(process, &status, WUNTRACED); // MEnunggu proses anak
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+    }
+}
+void chdirss(char **args) //Fungsi untuk berpindah direktori
+{
+    chdir(args[1]); //arg[1] menunjukan direktori setelah user mengetik cd
 }
 int main(){
-  char *input;
-  char **args;
-  int status;
+    char *input;
+    char **args;
+    char *pwd; // *char menunjuk pwd sekarang
+    char buff[100]; //Buff pwd
     while(1){
-        printf(KBLU "%s#" KYEL "%s " KGRN "> $ " RESET,getenv("USER"),getenv("GDMSESSION"));
+        pwd=getcwd(buff, sizeof(buff)); // Mengecek pwd terkini
+        printf(KBLU "%s#" KYEL "%s%s" KGRN " > $ " RESET,getenv("USER"),getenv("GDMSESSION"         ),pwd); //Template inputan user
+
         input=inputs();
         args=splitToToken(input);
-   //    printf("Input : ");puts(input);
-//puts(args[2]);
-      free(input);
-      free(args);
 
+        if(strcmp(args[0],"Exit")==0 || strcmp(args[0],"exit")==0){
+            break;
+        }else if (strcmp(args[0],"cd")==0){
+            chdirss(args);
+        }else{
+            execute(args);
+        }
+        signal(SIGINT, signal_handler); //Untuk signal ctrl-c
+        signal(SIGTSTP, signal_handler); //Untuk signal ctrl-z
     }
- //     puts(args[1]);
-//printf("%s\n",inputs());
-//execve("/bin/ls", argv, envp);
-//	execve("/bin/ls", argv,NULL);
+    free(input);
+    free(args);
     return 0;
 }
 
