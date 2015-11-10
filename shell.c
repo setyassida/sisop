@@ -27,8 +27,15 @@ void signal_handler(int signo) // Fungsi penangkap sinyal
 char* inputs(){ // Fungsi untuk menerima inputan user
     int Max=MaxInput;
 	char* input=malloc(sizeof(char)*Max);
+   // char* end=(char*)EOF;
 
+    //char *exits;
+    //exits=end;
     getline(&input, &Max, stdin);
+    //puts(input);
+    //if(input==end){
+      // exit(1);
+   //}
     return input;
 }
 char **splitToToken(char* input){ // Fungsi untuk memecah inputan user
@@ -44,21 +51,50 @@ char **splitToToken(char* input){ // Fungsi untuk memecah inputan user
     }
     return tokens;
 }
-void execute(char**args){ //Fungsi membuat proses dr inputan user
+int isBackgroundProcess(char**args){
+    int i=0;
+    int Max=MaxInput;
+    for(i=0;i<MaxInput;i++){
+        if(args[i]==NULL){
+            return 0;
+        }else if(strcmp(args[i],"&")==0){
+            return i;
+        }
+    }
+}
+void process(char**args){ //Fungsi membuat proses dr inputan user
     pid_t process,wpid;
     int status;
     process=fork();
     if(process==0){
-        execvp(args[0], args); // Eksekusi Inputan user
+        if (strcmp(args[0],"cd")==0){
+            chdir(args[1]); //arg[1] menunjukan direktori setelah user mengetik cd
+        }else{
+            execvp(args[0], args); // Eksekusi Inputan user
+        }
+
     }else{
         do {
             wpid = waitpid(process, &status, WUNTRACED); // MEnunggu proses anak
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
 }
-void chdirss(char **args) //Fungsi untuk berpindah direktori
-{
-    chdir(args[1]); //arg[1] menunjukan direktori setelah user mengetik cd
+void backgroundprocess(char**args){ //Fungsi membuat proses dr inputan user
+    pid_t process,sid;
+    int status;
+    process=fork();
+    if(process>0){
+        return ;
+    }else{
+        umask(0);
+sid = setsid();
+       if (strcmp(args[0],"cd")==0){
+            chdir(args[1]); //arg[1] menunjukan direktori setelah user mengetik cd
+        }else{
+            execvp(args[0], args); // Eksekusi Inputan user
+        }
+
+    }
 }
 int main(){
     char *input;
@@ -74,11 +110,17 @@ int main(){
 
         if(strcmp(args[0],"Exit")==0 || strcmp(args[0],"exit")==0){
             break;
-        }else if (strcmp(args[0],"cd")==0){
-            chdirss(args);
-        }else{
-            execute(args);
         }
+
+        if(!isBackgroundProcess(args)){
+            process(args);
+        }else{
+            int index_apersand= isBackgroundProcess(args);
+            args[index_apersand]=NULL;
+            backgroundprocess(args);
+        }
+
+
         signal(SIGINT, signal_handler); //Untuk signal ctrl-c
         signal(SIGTSTP, signal_handler); //Untuk signal ctrl-z
     }
