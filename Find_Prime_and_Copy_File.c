@@ -20,7 +20,7 @@ void *find_prime(void *args) {
 }
 
 void main () {
-	int input,i=1,j=0,banyak_bilprim =0;
+	int input,i=1,j=1,banyak_bilprim =0;
 	printf("Input some number : ");scanf("%d",&input);
 	pthread_t t1[input];
 	void* bilprim;
