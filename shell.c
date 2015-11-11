@@ -26,54 +26,11 @@ void signal_handler(int signo) // Fungsi penangkap sinyal
 	main();
         signal(SIGINT, SIG_IGN); //Untuk signal ctrl-c
     }
-}/*
-char* inputs(){ // Fungsi untuk menerima inputan user
-   int bufsize = MaxInput;
-  int position = 0;
-  char *buffer = malloc(sizeof(char) * bufsize);
-  int c;
-
-  if (!buffer) {
-    fprintf(stderr, "lsh: allocation error\n");
-    exit(EXIT_FAILURE);
-  }
-
-  while (1) {
-    // Read a character
-    c = getchar();
-
-    // If we hit EOF, replace it with a null character and return.
-    if (c == EOF || c == '\n') {
-      buffer[position] = '\0';
-      return buffer;
-    } else {
-      buffer[position] = c;
-    }
-    position++;
-
-    // If we have exceeded the buffer, reallocate.
-    if (position >= bufsize) {
-      bufsize += MaxInput;
-      buffer = realloc(buffer, bufsize);
-      if (!buffer) {
-        fprintf(stderr, "lsh: allocation error\n");
-        exit(EXIT_FAILURE);
-      }
-    }
-  }
-}*/
+}
 char* inputs(){ // Fungsi untuk menerima inputan user
     int Max=MaxInput;
 	char* input=malloc(sizeof(char)*Max);
-   // char* end=(char*)EOF;
-
-    //char *exits;
-    //exits=end;
     getline(&input, &Max, stdin);
-    //puts(input);
-    //if(input==end){
-      // exit(1);
-   //}
     return input;
 }
 char **splitToToken(char* input){ // Fungsi untuk memecah inputan user
@@ -135,29 +92,23 @@ sid = setsid();
 
     }
 }
-//void ctrlD(int* buff){
-//	if(buff<0){
-//		printf("awoawkaowk\n");
-//	}
-//}
 int main(){
    char *input;
     char **args;
     char *pwd; // *char menunjuk pwd sekarang
     char buff[100]; //Buff pwd
-//	int* eo;
     while(1){
         pwd=getcwd(buff, sizeof(buff)); // Mengecek pwd terkini
         printf(KBLU "%s#" KYEL "%s%s" KGRN " > $ " RESET,getenv("USER"),getenv("GDMSESSION"         ),pwd); //Template inputan user
+	
+        signal(SIGINT, signal_handler); //Untuk signal ctrl-c
+        signal(SIGTSTP, signal_handler); //Untuk signal ctrl-z 
 
-//        input=inputs();
-//printf("%d",(int)input);	
-//sscanf(input, "%d",eo);
-	//ctrlD(eo);        
+        input=inputs(); 
 	args=splitToToken(input);
 
         if(strcmp(args[0],"Exit")==0 || strcmp(args[0],"exit")==0){
-            break;
+            exit(1);
         }
 
         if(!isBackgroundProcess(args)){
@@ -169,21 +120,9 @@ int main(){
         }
 
 
-        signal(SIGINT, signal_handler); //Untuk signal ctrl-c
-        signal(SIGTSTP, signal_handler); //Untuk signal ctrl-z 
     }
     free(input);
     free(args);
-//char *e=EOF;
-//printf("%d",e);
-//int a;
-//while(1){
-//e=inputs();
-//sscanf(e, "%d", a);
-//printf("%d\n",a);
-//if(e==EOF){break;};
-//	sleep(1);
-//}
     return 0;
 }
 
